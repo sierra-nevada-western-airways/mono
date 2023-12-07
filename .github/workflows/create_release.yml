@@ -1,4 +1,4 @@
-name: Create Release
+name: Package for Octopus
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   create-release:
-    name: "Create Release"
+    name: "Package for Octopus"
     runs-on: "ubuntu-latest"
 
     steps:
