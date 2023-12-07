@@ -1,0 +1,37 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+        master
+
+jobs:
+  create-release:
+    name: "Create Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet 8.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Publish
+        run: dotnet publish -c Release source/Mono.API/Mono.API.csproj /p:EnvironmentName=Development --property:PublishDir=app
+
+      - name: "Release Artifact"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          title: "Development Build"
+          files: app/
