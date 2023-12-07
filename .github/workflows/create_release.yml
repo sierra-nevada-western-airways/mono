@@ -34,4 +34,4 @@ jobs:
         run: dotnet publish -c Release source/Mono.API/Mono.API.csproj /p:EnvironmentName=Development --property:PublishDir=app
 
       - name: Package for Octopus
-        run: dotnet octo pack /app --id="Mono"
+        run: octo pack /app --id="Mono" --format="Zip"
