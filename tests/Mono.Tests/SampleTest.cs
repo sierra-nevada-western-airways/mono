@@ -8,5 +8,11 @@ namespace Mono.Tests
 		{
 			Assert.IsTrue(true);
 		}
+
+		[TestMethod]
+		public void OtherMethod()
+		{
+			Assert.IsFalse(false);
+		}
 	}
 }
