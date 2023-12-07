@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.API", "source\Mono.API\Mono.API.csproj", "{BF0BB0EC-609E-4207-893A-EDCB6EE6278C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Tests", "tests\Mono.Tests\Mono.Tests.csproj", "{8E5C09AE-4E3D-470C-A729-227CCD56B326}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BF0BB0EC-609E-4207-893A-EDCB6EE6278C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF0BB0EC-609E-4207-893A-EDCB6EE6278C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF0BB0EC-609E-4207-893A-EDCB6EE6278C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E5C09AE-4E3D-470C-A729-227CCD56B326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5C09AE-4E3D-470C-A729-227CCD56B326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5C09AE-4E3D-470C-A729-227CCD56B326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5C09AE-4E3D-470C-A729-227CCD56B326}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
