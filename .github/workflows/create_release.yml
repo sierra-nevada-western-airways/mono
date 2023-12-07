@@ -28,10 +28,5 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release source/Mono.API/Mono.API.csproj /p:EnvironmentName=Development --property:PublishDir=app
 
-      - name: "Release Artifact"
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          title: "Development Build"
-          files: app/
+      - name: Release
+        uses: softprops/action-gh-release@v1
