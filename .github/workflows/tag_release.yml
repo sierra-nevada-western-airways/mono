@@ -38,7 +38,6 @@ jobs:
         id: tag_version
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ steps.timestamp }}
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
