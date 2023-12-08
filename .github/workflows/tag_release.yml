@@ -1,0 +1,48 @@
+name: Tag & Release on GitHub
+
+on:
+  push:
+    branches: master
+
+jobs:
+  create-release:
+    name: "Tag & Releas on GitHub"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet 8.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Publish
+        run: dotnet publish -c Release source/Mono.API/Mono.API.csproj /p:EnvironmentName=Development --property:PublishDir=app
+
+      - name: Get Timestamp
+        id: timestamp
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+          format: "YYYY_MM_DD HH_mm_ss"
+
+      - name: Create Tag
+        uses: mathieudutour/github-tag-action@v6.1
+        id: tag_version
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.timestamp }}
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
