@@ -8,6 +8,8 @@ jobs:
   create-release:
     name: "Tag & Releas on GitHub"
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
