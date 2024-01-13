@@ -18,7 +18,7 @@ namespace Mono.Infrastructure.Authentication.DataAccess
         /// Initializes a new instance of the <see cref="UserContext"/> class.
         /// </summary>
         /// <param name="options">An instance of the <see cref="DbContextOptions"/> configuration.</param>
-        public UserContext(DbContextOptions options)
+        public UserContext(DbContextOptions<UserContext> options)
             : base(options)
         {
             Database.EnsureCreated();

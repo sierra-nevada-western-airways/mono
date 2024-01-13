@@ -41,6 +41,8 @@ namespace Mono.API
 
             app.MapControllers();
 
+            app.UseCors(policyBuilder => policyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.Run();
         }
     }

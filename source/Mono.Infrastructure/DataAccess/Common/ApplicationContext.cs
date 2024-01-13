@@ -4,6 +4,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Mono.Domain.Customers;
+using Mono.Infrastructure.DataAccess.Customers;
 
 namespace Mono.Infrastructure.DataAccess.Common
 {
@@ -16,7 +17,7 @@ namespace Mono.Infrastructure.DataAccess.Common
         /// Initializes a new instance of the <see cref="ApplicationContext"/> class.
         /// </summary>
         /// <param name="options">A <see cref="DbContextOptions"/> object for configuration.</param>
-        public ApplicationContext(DbContextOptions options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -28,5 +29,16 @@ namespace Mono.Infrastructure.DataAccess.Common
         /// Gets the db set for customers.
         /// </summary>
         public DbSet<Customer> Customers { get; }
+
+        /// <summary>
+        /// Configures the context models.
+        /// </summary>
+        /// <param name="modelBuilder">An instance of the <see cref="ModelBuilder"/> object.</param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            new CustomerBuilder().BuildEntity(modelBuilder);
+        }
     }
 }
