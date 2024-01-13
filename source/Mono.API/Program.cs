@@ -2,6 +2,8 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using Mono.Infrastructure.Dependencies;
+
 namespace Mono.API
 {
     /// <summary>
@@ -19,7 +21,10 @@ namespace Mono.API
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerAuthentication();
+            builder.Services.AddApplication();
+            builder.Services.AddIdentityAuthentication(builder.Configuration);
+            builder.Services.AddDataAccess(builder.Configuration);
 
             var app = builder.Build();
 
@@ -31,6 +36,7 @@ namespace Mono.API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

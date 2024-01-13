@@ -8,6 +8,7 @@
         <ImplicitUsings>True</ImplicitUsings>
         <Nullable>enable</Nullable>
         <CheckEolTargetFramework>True</CheckEolTargetFramework>
+        <InvariantGlobalization>False</InvariantGlobalization>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
