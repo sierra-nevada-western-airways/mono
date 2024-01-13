@@ -32,15 +32,3 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release source/Mono.API/Mono.API.csproj /p:EnvironmentName=Development --property:PublishDir=app
-
-      - name: Package for Octopus
-        run: octo pack /app --id="Mono" --format="Zip"
-
-      - name: Push a package to Octopus Deploy
-        uses: OctopusDeploy/push-package-action@v3
-        env:
-          OCTOPUS_URL: ${{ secrets.OCTOPUS_SERVER }}
-          OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY }}
-          OCTOPUS_SPACE: 'Default'
-        with:
-          packages: Mono.**.zip

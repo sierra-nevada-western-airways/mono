@@ -1,31 +1,41 @@
+// <copyright file="Program.cs" company="Sierra Nevada Western Airways LLC">
+// Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
+// </copyright>
 
 namespace Mono.API
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    /// <summary>
+    /// Entry point for the application.
+    /// </summary>
+    public class Program
+    {
+        /// <summary>
+        /// Entry method for the application.
+        /// </summary>
+        /// <param name="args">Command line starting arguments.</param>
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddControllers();
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-			app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-			app.UseAuthorization();
+            app.UseAuthorization();
 
-			app.MapControllers();
+            app.MapControllers();
 
-			app.Run();
-		}
-	}
+            app.Run();
+        }
+    }
 }
