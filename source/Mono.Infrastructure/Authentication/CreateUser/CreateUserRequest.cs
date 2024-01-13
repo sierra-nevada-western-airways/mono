@@ -1,24 +1,24 @@
-﻿// <copyright file="CreateCustomerRequest.cs" company="Sierra Nevada Western Airways LLC">
+﻿// <copyright file="CreateUserRequest.cs" company="Sierra Nevada Western Airways LLC">
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace Mono.Infrastructure.Authentication.CreateCustomer
+namespace Mono.Infrastructure.Authentication.CreateUser
 {
     /// <summary>
-    /// Request class for creating a new customer.
+    /// Request class for creating a new user.
     /// </summary>
-    public class CreateCustomerRequest : IRequest<CreateCustomerResponse>
+    public class CreateUserRequest : IRequest<CreateUserResponse>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateCustomerRequest"/> class.
+        /// Initializes a new instance of the <see cref="CreateUserRequest"/> class.
         /// </summary>
-        /// <param name="userName">The customer username.</param>
-        /// <param name="password">The customer password.</param>
-        /// <param name="email">The customer email.</param>
-        public CreateCustomerRequest(string userName, string password, string email)
+        /// <param name="userName">The user username.</param>
+        /// <param name="password">The user password.</param>
+        /// <param name="email">The user email.</param>
+        public CreateUserRequest(string userName, string password, string email)
         {
             UserName = userName;
             Password = password;
@@ -26,19 +26,19 @@ namespace Mono.Infrastructure.Authentication.CreateCustomer
         }
 
         /// <summary>
-        /// Gets the customer username.
+        /// Gets the user username.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public string UserName { get; }
 
         /// <summary>
-        /// Gets the customer password.
+        /// Gets the user password.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public string Password { get; }
 
         /// <summary>
-        /// Gets the customer email.
+        /// Gets the user email.
         /// </summary>
         [EmailAddress]
         [Required(AllowEmptyStrings = false)]

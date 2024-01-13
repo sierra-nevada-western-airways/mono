@@ -34,12 +34,12 @@ namespace Mono.Infrastructure.Dependencies
             services.AddTransient<ITokenService, TokenService>();
 
             services
-                .AddIdentity<Customer, IdentityRole<Guid>>(
+                .AddIdentity<User, IdentityRole<Guid>>(
                     options =>
                     {
                         options.User.RequireUniqueEmail = true;
                     })
-                .AddEntityFrameworkStores<CustomerContext>()
+                .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders();
 
             services

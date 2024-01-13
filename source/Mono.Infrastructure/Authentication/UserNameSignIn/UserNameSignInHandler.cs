@@ -49,13 +49,13 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
                 throw new Exception(nameof(passwordCorrect));
             }
 
-            var claims = CustomerFactory.CustomerClaims(customer);
+            var claims = UserFactory.CustomerClaims(customer);
 
             var bearerToken = _tokenService.GenerateToken(claims);
 
             var refreshToken = await _tokenService.GenerateRefreshToken(customer, cancellationToken);
 
-            return CustomerFactory.SignInUserNameResponse(bearerToken, refreshToken);
+            return UserFactory.SignInUserNameResponse(bearerToken, refreshToken);
         }
     }
 }

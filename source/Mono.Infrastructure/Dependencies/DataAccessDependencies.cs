@@ -2,11 +2,15 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mono.Application.Customers.Common;
 using Mono.Infrastructure.Authentication.Common.Interfaces;
 using Mono.Infrastructure.Authentication.DataAccess;
+using Mono.Infrastructure.DataAccess.Common;
+using Mono.Infrastructure.DataAccess.Customers;
 
 namespace Mono.Infrastructure.Dependencies
 {
@@ -22,9 +26,13 @@ namespace Mono.Infrastructure.Dependencies
         /// <param name="configuration">An instance of the <see cref="IConfiguration"/> interface.</param>
         public static void AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<CustomerContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Persistence")));
+            services.AddDbContext<UserContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Identity")));
+
+            services.AddDbContext<ApplicationContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Application")));
 
             services.AddTransient<ICustomerManager, CustomerManager>();
+
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
         }
     }
 }

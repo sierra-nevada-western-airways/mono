@@ -7,7 +7,7 @@ namespace Mono.Domain.Common
     /// <summary>
     /// Basic interface for entities.
     /// </summary>
-    internal interface IEntity
+    public interface IEntity
     {
         /// <summary>
         /// Gets the entity identifier.

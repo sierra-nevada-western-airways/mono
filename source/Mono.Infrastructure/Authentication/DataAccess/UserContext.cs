@@ -1,4 +1,4 @@
-﻿// <copyright file="CustomerContext.cs" company="Sierra Nevada Western Airways LLC">
+﻿// <copyright file="UserContext.cs" company="Sierra Nevada Western Airways LLC">
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
@@ -12,13 +12,13 @@ namespace Mono.Infrastructure.Authentication.DataAccess
     /// <summary>
     /// Context for persisting identity customers.
     /// </summary>
-    internal sealed class CustomerContext : IdentityDbContext<Customer, IdentityRole<Guid>, Guid>
+    internal sealed class UserContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerContext"/> class.
+        /// Initializes a new instance of the <see cref="UserContext"/> class.
         /// </summary>
         /// <param name="options">An instance of the <see cref="DbContextOptions"/> configuration.</param>
-        public CustomerContext(DbContextOptions options)
+        public UserContext(DbContextOptions options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -40,7 +40,7 @@ namespace Mono.Infrastructure.Authentication.DataAccess
             base.OnModelCreating(builder);
 
             builder.Entity<RefreshToken>()
-                .HasOne(token => token.Customer);
+                .HasOne(token => token.User);
 
             builder.Entity<RefreshToken>(typeBuilder =>
             {

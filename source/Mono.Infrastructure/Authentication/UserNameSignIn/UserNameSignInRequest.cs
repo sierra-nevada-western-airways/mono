@@ -15,8 +15,8 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
         /// <summary>
         /// Initializes a new instance of the <see cref="UserNameSignInRequest"/> class.
         /// </summary>
-        /// <param name="userName">The customer username.</param>
-        /// <param name="password">The customer password.</param>
+        /// <param name="userName">The user username.</param>
+        /// <param name="password">The user password.</param>
         public UserNameSignInRequest(string userName, string password)
         {
             UserName = userName;
@@ -24,13 +24,13 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
         }
 
         /// <summary>
-        /// Gets the customer username.
+        /// Gets the user username.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public string UserName { get; }
 
         /// <summary>
-        /// Gets the customer password.
+        /// Gets the user password.
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public string Password { get; }

@@ -1,11 +1,11 @@
-﻿// <copyright file="CustomerController.cs" company="Sierra Nevada Western Airways LLC">
+﻿// <copyright file="UserController.cs" company="Sierra Nevada Western Airways LLC">
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mono.Infrastructure.Authentication.CreateCustomer;
+using Mono.Infrastructure.Authentication.CreateUser;
 using Mono.Infrastructure.Authentication.UserNameSignIn;
 
 namespace Mono.API.Controllers
@@ -15,15 +15,15 @@ namespace Mono.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class CustomerController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerController"/> class.
+        /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="mediator">An instance of the <see cref="IMediator"/> interface.</param>
-        public CustomerController(IMediator mediator)
+        public UserController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -31,12 +31,12 @@ namespace Mono.API.Controllers
         /// <summary>
         /// End-point for creating a new customer.
         /// </summary>
-        /// <param name="request">A <see cref="CreateCustomerRequest"/> object.</param>
+        /// <param name="request">A <see cref="CreateUserRequest"/> object.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="IActionResult"/>.</returns>
         [AllowAnonymous]
-        [HttpPost("", Name = "CreateCustomer")]
-        [ProducesResponseType(typeof(CreateCustomerResponse), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateCustomer(CreateCustomerRequest request)
+        [HttpPost("", Name = "CreateUser")]
+        [ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateUser(CreateUserRequest request)
         {
             var response = await _mediator.Send(request);
 

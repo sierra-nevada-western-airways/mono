@@ -18,13 +18,13 @@ namespace Mono.Infrastructure.Authentication.Common.Models
         {
             Token = token;
             ExpiresAt = expiresAt;
-            Customer = default!;
+            User = default!;
         }
 
-        private RefreshToken(string token, Customer customer)
+        private RefreshToken(string token, User user)
             : this(token, DateTime.UtcNow.AddMinutes(15))
         {
-            Customer = customer;
+            User = user;
         }
 
         /// <summary>
@@ -38,19 +38,19 @@ namespace Mono.Infrastructure.Authentication.Common.Models
         public DateTime ExpiresAt { get; }
 
         /// <summary>
-        /// Gets the customer for the token.
+        /// Gets the user for the token.
         /// </summary>
-        public Customer Customer { get; }
+        public User User { get; }
 
         /// <summary>
         /// Factory method for creating a new refresh token.
         /// </summary>
         /// <param name="token">A new refresh token.</param>
-        /// <param name="customer">A <see cref="Customer"/>.</param>
+        /// <param name="user">A <see cref="User"/>.</param>
         /// <returns>A new <see cref="RefreshToken"/> instance.</returns>
-        public static RefreshToken Instantiate(string token, Customer customer)
+        public static RefreshToken Instantiate(string token, User user)
         {
-            return new RefreshToken(token, customer);
+            return new RefreshToken(token, user);
         }
     }
 }

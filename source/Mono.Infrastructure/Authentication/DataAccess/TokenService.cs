@@ -18,17 +18,17 @@ namespace Mono.Infrastructure.Authentication.DataAccess
     internal class TokenService : ITokenService
     {
         private readonly SecurityOptions _securityOptions;
-        private readonly CustomerContext _customerContext;
+        private readonly UserContext _userContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenService"/> class.
         /// </summary>
         /// <param name="securityOptions">An instance of the <see cref="SecurityOptions"/> class.</param>
-        /// <param name="customerContext">An instance of the <see cref="CustomerContext"/> class.</param>
-        public TokenService(SecurityOptions securityOptions, CustomerContext customerContext)
+        /// <param name="userContext">An instance of the <see cref="UserContext"/> class.</param>
+        public TokenService(SecurityOptions securityOptions, UserContext userContext)
         {
             _securityOptions = securityOptions;
-            _customerContext = customerContext;
+            _userContext = userContext;
         }
 
         /// <inheritdoc/>
@@ -49,7 +49,7 @@ namespace Mono.Infrastructure.Authentication.DataAccess
         }
 
         /// <inheritdoc/>
-        public async Task<string> GenerateRefreshToken(Customer customer, CancellationToken cancellationToken)
+        public async Task<string> GenerateRefreshToken(User user, CancellationToken cancellationToken)
         {
             string refreshToken;
 
@@ -60,23 +60,23 @@ namespace Mono.Infrastructure.Authentication.DataAccess
                 refreshToken = Convert.ToBase64String(bytes);
             }
 
-            await _customerContext.RefreshTokens.AddAsync(RefreshToken.Instantiate(refreshToken, customer), cancellationToken);
+            await _userContext.RefreshTokens.AddAsync(RefreshToken.Instantiate(refreshToken, user), cancellationToken);
 
-            await _customerContext.SaveChangesAsync(cancellationToken);
+            await _userContext.SaveChangesAsync(cancellationToken);
 
             return refreshToken;
         }
 
         /// <inheritdoc/>
-        public async Task<IdentityResult> ClearTokens(Customer customer, CancellationToken cancellationToken)
+        public async Task<IdentityResult> ClearTokens(User user, CancellationToken cancellationToken)
         {
-            var refreshTokens = await _customerContext.RefreshTokens
-                .Where(token => token.Customer.Id == customer.Id)
+            var refreshTokens = await _userContext.RefreshTokens
+                .Where(token => token.User.Id == user.Id)
                 .ToListAsync(cancellationToken);
 
-            _customerContext.RefreshTokens.RemoveRange(refreshTokens);
+            _userContext.RefreshTokens.RemoveRange(refreshTokens);
 
-            var result = await _customerContext.SaveChangesAsync(cancellationToken);
+            var result = await _userContext.SaveChangesAsync(cancellationToken);
 
             if (result > 0)
             {

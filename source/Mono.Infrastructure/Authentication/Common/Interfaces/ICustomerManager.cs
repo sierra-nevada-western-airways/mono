@@ -13,27 +13,27 @@ namespace Mono.Infrastructure.Authentication.Common.Interfaces
     internal interface ICustomerManager
     {
         /// <summary>
-        /// Creates a new customer and persists the result.
+        /// Creates a new user and persists the result.
         /// </summary>
-        /// <param name="customer">A <see cref="Customer"/>.</param>
-        /// <param name="password">The customer's password.</param>
+        /// <param name="user">A <see cref="User"/>.</param>
+        /// <param name="password">The user's password.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="IdentityResult"/>.</returns>
-        Task<IdentityResult> CreateCustomer(Customer customer, string password, CancellationToken cancellationToken);
+        Task<IdentityResult> CreateCustomer(User user, string password, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Finds a customer by username.
+        /// Finds a user by username.
         /// </summary>
-        /// <param name="userName">The customer username.</param>
-        /// <returns>A <see cref="Task"/> of type <see cref="Customer"/>.</returns>
-        Task<Customer?> FindCustomerByUserName(string userName);
+        /// <param name="userName">The user username.</param>
+        /// <returns>A <see cref="Task"/> of type <see cref="User"/>.</returns>
+        Task<User?> FindCustomerByUserName(string userName);
 
         /// <summary>
-        /// Checks a password for a customer.
+        /// Checks a password for a user.
         /// </summary>
-        /// <param name="customer">A <see cref="Customer"/>.</param>
-        /// <param name="password">The password for the customer.</param>
+        /// <param name="user">A <see cref="User"/>.</param>
+        /// <param name="password">The password for the user.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="bool"/>.</returns>
-        Task<bool> PasswordIsCorrect(Customer customer, string password);
+        Task<bool> PasswordIsCorrect(User user, string password);
     }
 }
