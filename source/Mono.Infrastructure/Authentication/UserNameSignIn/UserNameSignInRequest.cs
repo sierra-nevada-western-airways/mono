@@ -1,28 +1,26 @@
-﻿// <copyright file="CreateCustomerRequest.cs" company="Sierra Nevada Western Airways LLC">
+﻿// <copyright file="UserNameSignInRequest.cs" company="Sierra Nevada Western Airways LLC">
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace Mono.Infrastructure.Authentication.CreateCustomer
+namespace Mono.Infrastructure.Authentication.UserNameSignIn
 {
     /// <summary>
-    /// Request class for creating a new customer.
+    /// Request object for a username sign in.
     /// </summary>
-    public class CreateCustomerRequest : IRequest<CreateCustomerResponse>
+    public class UserNameSignInRequest : IRequest<UserNameSignInResponse>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CreateCustomerRequest"/> class.
+        /// Initializes a new instance of the <see cref="UserNameSignInRequest"/> class.
         /// </summary>
         /// <param name="userName">The customer username.</param>
         /// <param name="password">The customer password.</param>
-        /// <param name="email">The customer email.</param>
-        public CreateCustomerRequest(string userName, string password, string email)
+        public UserNameSignInRequest(string userName, string password)
         {
             UserName = userName;
             Password = password;
-            Email = email;
         }
 
         /// <summary>
@@ -36,12 +34,5 @@ namespace Mono.Infrastructure.Authentication.CreateCustomer
         /// </summary>
         [Required(AllowEmptyStrings = false)]
         public string Password { get; }
-
-        /// <summary>
-        /// Gets the customer email.
-        /// </summary>
-        [EmailAddress]
-        [Required(AllowEmptyStrings = false)]
-        public string Email { get; }
     }
 }

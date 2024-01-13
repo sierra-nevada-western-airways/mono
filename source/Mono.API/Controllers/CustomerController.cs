@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mono.Infrastructure.Authentication.CreateCustomer;
+using Mono.Infrastructure.Authentication.UserNameSignIn;
 
 namespace Mono.API.Controllers
 {
@@ -37,9 +38,24 @@ namespace Mono.API.Controllers
         [ProducesResponseType(typeof(CreateCustomerResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateCustomer(CreateCustomerRequest request)
         {
-            var result = await _mediator.Send(request);
+            var response = await _mediator.Send(request);
 
-            return Created(new Uri(string.Empty), result);
+            return Created(new Uri($"Customer/{response.Id}", UriKind.Relative), response);
+        }
+
+        /// <summary>
+        /// End-point for singing in via a username.
+        /// </summary>
+        /// <param name="request">A <see cref="UserNameSignInRequest"/> object.</param>
+        /// <returns>A <see cref="Task"/> of type <see cref="IActionResult"/>.</returns>
+        [AllowAnonymous]
+        [HttpPost("SignIn/Username", Name = "UserNameSignIn")]
+        [ProducesResponseType(typeof(UserNameSignInResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UserNameSignIn(UserNameSignInRequest request)
+        {
+            var response = await _mediator.Send(request);
+
+            return Ok(response);
         }
     }
 }

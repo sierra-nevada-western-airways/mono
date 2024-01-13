@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Mono.Infrastructure.Authentication.Common.Interfaces;
 using Mono.Infrastructure.Authentication.Common.Models;
 using Mono.Infrastructure.Authentication.DataAccess;
 
@@ -30,8 +31,14 @@ namespace Mono.Infrastructure.Dependencies
                 .Get<SecurityOptions>() ?? throw new NullReferenceException(nameof(configuration));
 
             services.AddSingleton(_ => securityOptions);
+            services.AddTransient<ITokenService, TokenService>();
 
-            services.AddIdentity<Customer, IdentityRole<Guid>>()
+            services
+                .AddIdentity<Customer, IdentityRole<Guid>>(
+                    options =>
+                    {
+                        options.User.RequireUniqueEmail = true;
+                    })
                 .AddEntityFrameworkStores<CustomerContext>()
                 .AddDefaultTokenProviders();
 

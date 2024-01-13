@@ -34,14 +34,14 @@ namespace Mono.Infrastructure.Authentication.CreateCustomer
         {
             var customer = CustomerFactory.FromRequest(request);
 
-            var result = await _customerManager.CreateCustomer(customer, request.Password);
+            var result = await _customerManager.CreateCustomer(customer, request.Password, cancellationToken);
 
             if (!result.Succeeded)
             {
                 throw new Exception("Bad things.");
             }
 
-            return new CreateCustomerResponse();
+            return CustomerFactory.FromCustomer(customer);
         }
     }
 }

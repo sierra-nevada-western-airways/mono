@@ -5,7 +5,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Mono.Infrastructure.Authentication.Common;
 using Mono.Infrastructure.Authentication.Common.Models;
 
 namespace Mono.Infrastructure.Authentication.DataAccess
@@ -24,13 +23,13 @@ namespace Mono.Infrastructure.Authentication.DataAccess
         {
             Database.EnsureCreated();
 
-            RefreshTokens = Set<AspNetUserRefreshToken>();
+            RefreshTokens = Set<RefreshToken>();
         }
 
         /// <summary>
         /// Gets the refresh token db set.
         /// </summary>
-        public DbSet<AspNetUserRefreshToken> RefreshTokens { get; }
+        public DbSet<RefreshToken> RefreshTokens { get; }
 
         /// <summary>
         /// Defines the models for the context.
@@ -40,10 +39,10 @@ namespace Mono.Infrastructure.Authentication.DataAccess
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<AspNetUserRefreshToken>()
+            builder.Entity<RefreshToken>()
                 .HasOne(token => token.Customer);
 
-            builder.Entity<AspNetUserRefreshToken>(typeBuilder =>
+            builder.Entity<RefreshToken>(typeBuilder =>
             {
                 typeBuilder.HasKey(token => token.Token);
                 typeBuilder.Property(token => token.ExpiresAt);
