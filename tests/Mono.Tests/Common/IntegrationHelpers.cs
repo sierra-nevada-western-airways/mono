@@ -76,11 +76,11 @@ namespace Mono.Tests.Common
                 services.AddIdentityAuthentication(new ConfigurationManager().AddInMemoryCollection(data).Build());
                 services.AddLogging();
 
-                var userConnection = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
-                                            "Server=.\\SQLExpress;Database=Mono.Identity.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
+                var userConnection = Environment.GetEnvironmentVariable("USER_CONNECTION_STRING") ??
+                                            "Server=.\\SQLExpress;Database=SWNA.User;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
 
-                var applicationConnection = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
-                                       "Server=.\\SQLExpress;Database=Mono.Application.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
+                var applicationConnection = Environment.GetEnvironmentVariable("APPLICATION_CONNECTION_STRING") ??
+                                       "Server=.\\SQLExpress;Database=SWNA.Application;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
 
                 services.AddDataAccess(userConnection, applicationConnection);
 
