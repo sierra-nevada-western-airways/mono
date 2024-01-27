@@ -2,7 +2,6 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using System.Reflection;
 using MediatorBuddy;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -65,7 +64,7 @@ namespace Mono.Tests.Common
                 services.AddLogging();
 
                 var connectionString = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
-                                       "Server=.\\SQLExpress;Database=ASC.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
+                                       "Server=.\\SQLExpress;Database=Mono.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
 
                 services.AddDbContext<ApplicationContext>(builder => builder.UseSqlServer(connectionString));
 

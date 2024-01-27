@@ -22,7 +22,7 @@ jobs:
         uses: Particular/install-sql-server-action@v1.0.2
         with:
           connection-string-env-var: SQL_SERVER_CONNECTION_STRING
-          catalog: ASC.Tests
+          catalog: Mono.Tests
           extra-params: "TrustServerCertificate=true;"
 
       - name: Restore
