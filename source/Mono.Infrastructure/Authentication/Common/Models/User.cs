@@ -11,7 +11,7 @@ namespace Mono.Infrastructure.Authentication.Common.Models
     /// <summary>
     /// Represents the identity of a user for authentication.
     /// </summary>
-    internal sealed class User : IdentityUser<Guid>
+    public sealed class User : IdentityUser<Guid>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.

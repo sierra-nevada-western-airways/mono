@@ -40,8 +40,6 @@ namespace Mono.Domain.Common
         /// <param name="notification">A <see cref="INotification"/> to append.</param>
         public void AddNotification(INotification notification)
         {
-            ArgumentNullException.ThrowIfNull(notification);
-
             _domainEvents.Add(notification);
         }
     }

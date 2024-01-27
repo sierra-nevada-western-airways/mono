@@ -71,7 +71,7 @@ namespace Mono.Domain.Common
         /// <returns>A hash code for the entity.</returns>
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return GetType().GetHashCode();
         }
     }
 }

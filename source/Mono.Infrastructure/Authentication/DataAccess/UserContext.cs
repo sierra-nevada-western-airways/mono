@@ -12,7 +12,7 @@ namespace Mono.Infrastructure.Authentication.DataAccess
     /// <summary>
     /// Context for persisting identity customers.
     /// </summary>
-    internal sealed class UserContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public sealed class UserContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserContext"/> class.
