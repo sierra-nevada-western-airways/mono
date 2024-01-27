@@ -2,7 +2,6 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using MediatR;
 using Mono.Application.Common.Responses;
 using Mono.Domain.Common;
 
