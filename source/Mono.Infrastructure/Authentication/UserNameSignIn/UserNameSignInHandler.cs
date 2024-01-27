@@ -2,7 +2,7 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using MediatR;
+using MediatorBuddy;
 using Mono.Infrastructure.Authentication.Common.Factories;
 using Mono.Infrastructure.Authentication.Common.Interfaces;
 
@@ -11,7 +11,7 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
     /// <summary>
     /// Handler for a username signin.
     /// </summary>
-    internal class UserNameSignInHandler : IRequestHandler<UserNameSignInRequest, UserNameSignInResponse>
+    internal class UserNameSignInHandler : IEnvelopeHandler<UserNameSignInRequest, UserNameSignInResponse>
     {
         private readonly ITokenService _tokenService;
         private readonly ICustomerManager _customerManager;
@@ -33,7 +33,7 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
         /// <param name="request">A <see cref="UserNameSignInRequest"/> object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="UserNameSignInResponse"/>.</returns>
-        public async Task<UserNameSignInResponse> Handle(UserNameSignInRequest request, CancellationToken cancellationToken)
+        public async Task<IEnvelope<UserNameSignInResponse>> Handle(UserNameSignInRequest request, CancellationToken cancellationToken)
         {
             var customer = await _customerManager.FindCustomerByUserName(request.UserName);
 
@@ -55,7 +55,9 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
 
             var refreshToken = await _tokenService.GenerateRefreshToken(customer, cancellationToken);
 
-            return UserFactory.SignInUserNameResponse(bearerToken, refreshToken);
+            var response = UserFactory.SignInUserNameResponse(bearerToken, refreshToken);
+
+            return Envelope<UserNameSignInResponse>.Success(response);
         }
     }
 }

@@ -3,14 +3,14 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations;
-using MediatR;
+using MediatorBuddy;
 
 namespace Mono.Infrastructure.Authentication.CreateUser
 {
     /// <summary>
     /// Request class for creating a new user.
     /// </summary>
-    public class CreateUserRequest : IRequest<CreateUserResponse>
+    public class CreateUserRequest : IEnvelopeRequest<CreateUserResponse>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateUserRequest"/> class.

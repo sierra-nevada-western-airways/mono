@@ -2,7 +2,6 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

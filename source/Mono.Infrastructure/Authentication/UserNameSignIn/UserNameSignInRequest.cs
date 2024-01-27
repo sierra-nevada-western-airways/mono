@@ -3,14 +3,14 @@
 // </copyright>
 
 using System.ComponentModel.DataAnnotations;
-using MediatR;
+using MediatorBuddy;
 
 namespace Mono.Infrastructure.Authentication.UserNameSignIn
 {
     /// <summary>
     /// Request object for a username sign in.
     /// </summary>
-    public class UserNameSignInRequest : IRequest<UserNameSignInResponse>
+    public class UserNameSignInRequest : IEnvelopeRequest<UserNameSignInResponse>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserNameSignInRequest"/> class.

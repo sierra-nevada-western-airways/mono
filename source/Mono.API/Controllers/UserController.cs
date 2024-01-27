@@ -2,6 +2,8 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using MediatorBuddy.AspNet;
+using MediatorBuddy.AspNet.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +17,15 @@ namespace Mono.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : MediatorBuddyApi
     {
-        private readonly IMediator _mediator;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="mediator">An instance of the <see cref="IMediator"/> interface.</param>
         public UserController(IMediator mediator)
+            : base(mediator)
         {
-            _mediator = mediator;
         }
 
         /// <summary>
@@ -34,13 +34,13 @@ namespace Mono.API.Controllers
         /// <param name="request">A <see cref="CreateUserRequest"/> object.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="IActionResult"/>.</returns>
         [AllowAnonymous]
-        [HttpPost("", Name = "CreateUser")]
+        [HttpPost(Name = "CreateUser")]
         [ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateUser(CreateUserRequest request)
         {
-            var response = await _mediator.Send(request);
-
-            return Created(new Uri($"Customer/{response.Id}", UriKind.Relative), response);
+            return await ExecuteRequest(
+                request,
+                ResponseOptions.CreatedResponse<CreateUserResponse>(response => new Uri($"Customer/{response.Id}", UriKind.Relative)));
         }
 
         /// <summary>
@@ -53,9 +53,7 @@ namespace Mono.API.Controllers
         [ProducesResponseType(typeof(UserNameSignInResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> UserNameSignIn(UserNameSignInRequest request)
         {
-            var response = await _mediator.Send(request);
-
-            return Ok(response);
+            return await ExecuteRequest(request, ResponseOptions.OkResponse<UserNameSignInResponse>());
         }
     }
 }

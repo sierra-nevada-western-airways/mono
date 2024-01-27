@@ -2,7 +2,7 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using MediatR;
+using MediatorBuddy;
 using Mono.Infrastructure.Authentication.Common.Factories;
 using Mono.Infrastructure.Authentication.Common.Interfaces;
 
@@ -11,7 +11,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser
     /// <summary>
     /// Handler for creating a new user.
     /// </summary>
-    internal class CreateUserHandler : IRequestHandler<CreateUserRequest, CreateUserResponse>
+    internal class CreateUserHandler : IEnvelopeHandler<CreateUserRequest, CreateUserResponse>
     {
         private readonly ICustomerManager _customerManager;
 
@@ -30,7 +30,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser
         /// <param name="request">A <see cref="CreateUserRequest"/> object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="CreateUserResponse"/>.</returns>
-        public async Task<CreateUserResponse> Handle(CreateUserRequest request, CancellationToken cancellationToken)
+        public async Task<IEnvelope<CreateUserResponse>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
         {
             var customer = UserFactory.FromRequest(request);
 
@@ -38,10 +38,12 @@ namespace Mono.Infrastructure.Authentication.CreateUser
 
             if (!result.Succeeded)
             {
-                throw new Exception("Bad things.");
+                return Envelope<CreateUserResponse>.UserCouldNotBeCreated();
             }
 
-            return UserFactory.FromCustomer(customer);
+            var response = UserFactory.FromCustomer(customer);
+
+            return Envelope<CreateUserResponse>.Success(response);
         }
     }
 }
