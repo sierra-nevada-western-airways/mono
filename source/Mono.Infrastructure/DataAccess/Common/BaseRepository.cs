@@ -32,7 +32,7 @@ namespace Mono.Infrastructure.DataAccess.Common
         }
 
         /// <inheritdoc/>
-        public async Task<Result> CreateEntity(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<Result> CreateEntity(TEntity entity, INotification? failureEvent = default, CancellationToken cancellationToken = default)
         {
             int rowCount;
 

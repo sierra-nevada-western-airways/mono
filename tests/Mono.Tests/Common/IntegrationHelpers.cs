@@ -4,11 +4,9 @@
 
 using MediatorBuddy;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mono.Infrastructure.Authentication.Common.Models;
 using Mono.Infrastructure.Authentication.DataAccess;
 using Mono.Infrastructure.DataAccess.Common;
 using Mono.Infrastructure.Dependencies;
@@ -52,11 +50,11 @@ namespace Mono.Tests.Common
             var applicationContext = GetApplicationContext();
             var userContext = GetUserContext();
 
-            userContext.Users.ExecuteDelete();
+            userContext.Users.RemoveRange(userContext.Users);
 
             userContext.SaveChanges();
 
-            applicationContext.Customers.ExecuteDelete();
+            applicationContext.Customers.RemoveRange(applicationContext.Customers);
 
             applicationContext.SaveChanges();
         }
