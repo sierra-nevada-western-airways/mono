@@ -9,13 +9,8 @@ using Mono.Tests.Common;
 namespace Mono.Tests.Application.Customers
 {
     [TestClass]
-    public class CreateCustomerHandlerIntegrationTests
+    public class CreateCustomerHandlerIntegrationTests : BaseIntegrationTest
     {
-        public CreateCustomerHandlerIntegrationTests()
-        {
-            IntegrationHelpers.ClearDatabase();
-        }
-
         [TestMethod]
         public async Task Handle_Success_AddCustomerToPersistence()
         {
@@ -23,7 +18,7 @@ namespace Mono.Tests.Application.Customers
 
             await handler.Handle(new CustomerCreated(Guid.NewGuid()), CancellationToken.None);
 
-            var context = await IntegrationHelpers.GetDatabaseContext().Customers.ToListAsync();
+            var context = await IntegrationHelpers.GetApplicationContext().Customers.ToListAsync();
 
             Assert.IsTrue(context.Count == 1);
         }

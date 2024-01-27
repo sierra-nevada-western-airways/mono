@@ -3,7 +3,6 @@
 // </copyright>
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mono.Application.Customers.Common;
 using Mono.Infrastructure.Authentication.Common.Interfaces;
@@ -22,14 +21,17 @@ namespace Mono.Infrastructure.Dependencies
         /// Adds data access dependencies.
         /// </summary>
         /// <param name="services">An instance of the <see cref="IServiceCollection"/> interface.</param>
-        /// <param name="configuration">An instance of the <see cref="IConfiguration"/> interface.</param>
-        public static void AddDataAccess(this IServiceCollection services, IConfiguration configuration)
+        /// <param name="userContextConnection">Connection string for identity persistence.</param>
+        /// <param name="applicationContextConnection">Connection string for application persistence.</param>
+        public static void AddDataAccess(this IServiceCollection services, string userContextConnection, string applicationContextConnection)
         {
-            services.AddDbContext<UserContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Identity")));
+            services.AddDbContext<UserContext>(builder => builder.UseSqlServer(userContextConnection));
 
-            services.AddDbContext<ApplicationContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Application")));
+            services.AddDbContext<IApplicationContext, ApplicationContext>(builder => builder.UseSqlServer(applicationContextConnection));
 
-            services.AddTransient<ICustomerManager, CustomerManager>();
+            services.AddTransient<IUserManager, UserDirector>();
+
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddTransient<ICustomerRepository, CustomerRepository>();
         }

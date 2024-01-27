@@ -17,7 +17,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser
         /// </summary>
         public UserValidator()
         {
-            RuleFor(user => user.Id).NotEqual(Guid.Empty);
+            RuleFor(user => user.DomainEvents).NotNull();
         }
     }
 }

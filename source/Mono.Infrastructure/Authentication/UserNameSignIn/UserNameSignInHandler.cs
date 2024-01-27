@@ -11,20 +11,20 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
     /// <summary>
     /// Handler for a username signin.
     /// </summary>
-    internal class UserNameSignInHandler : IEnvelopeHandler<UserNameSignInRequest, UserNameSignInResponse>
+    public class UserNameSignInHandler : IEnvelopeHandler<UserNameSignInRequest, UserNameSignInResponse>
     {
         private readonly ITokenService _tokenService;
-        private readonly ICustomerManager _customerManager;
+        private readonly IUserManager _userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserNameSignInHandler"/> class.
         /// </summary>
         /// <param name="tokenService">An instance of the <see cref="ITokenService"/> interface.</param>
-        /// <param name="customerManager">An instance of the <see cref="ICustomerManager"/> interface.</param>
-        public UserNameSignInHandler(ITokenService tokenService, ICustomerManager customerManager)
+        /// <param name="userManager">An instance of the <see cref="IUserManager"/> interface.</param>
+        public UserNameSignInHandler(ITokenService tokenService, IUserManager userManager)
         {
             _tokenService = tokenService;
-            _customerManager = customerManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -35,18 +35,18 @@ namespace Mono.Infrastructure.Authentication.UserNameSignIn
         /// <returns>A <see cref="Task"/> of type <see cref="UserNameSignInResponse"/>.</returns>
         public async Task<IEnvelope<UserNameSignInResponse>> Handle(UserNameSignInRequest request, CancellationToken cancellationToken)
         {
-            var customer = await _customerManager.FindCustomerByUserName(request.UserName);
+            var customer = await _userManager.FindUserByName(request.UserName);
 
             if (customer == null)
             {
-                throw new Exception(nameof(customer));
+                return Envelope<UserNameSignInResponse>.UserDoesNotExist();
             }
 
-            var passwordCorrect = await _customerManager.PasswordIsCorrect(customer, request.Password);
+            var passwordCorrect = await _userManager.PasswordIsCorrect(customer, request.Password);
 
             if (!passwordCorrect)
             {
-                throw new Exception(nameof(passwordCorrect));
+                return Envelope<UserNameSignInResponse>.PasswordIsIncorrect();
             }
 
             var claims = UserFactory.CustomerClaims(customer);

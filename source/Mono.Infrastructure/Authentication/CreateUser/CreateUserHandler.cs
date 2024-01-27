@@ -13,15 +13,15 @@ namespace Mono.Infrastructure.Authentication.CreateUser
     /// </summary>
     internal class CreateUserHandler : IEnvelopeHandler<CreateUserRequest, CreateUserResponse>
     {
-        private readonly ICustomerManager _customerManager;
+        private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateUserHandler"/> class.
         /// </summary>
-        /// <param name="customerManager">An instance of the <see cref="ICustomerManager"/> interface.</param>
-        public CreateUserHandler(ICustomerManager customerManager)
+        /// <param name="userRepository">An instance of the <see cref="IUserManager"/> interface.</param>
+        public CreateUserHandler(IUserRepository userRepository)
         {
-            _customerManager = customerManager;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser
         {
             var customer = UserFactory.FromRequest(request);
 
-            var result = await _customerManager.CreateCustomer(customer, request.Password, cancellationToken);
+            var result = await _userRepository.CreateUser(customer, request.Password, cancellationToken);
 
             if (!result.Succeeded)
             {

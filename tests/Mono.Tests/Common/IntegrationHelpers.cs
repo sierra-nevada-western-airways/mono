@@ -6,12 +6,11 @@ using MediatorBuddy;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mono.Application.Customers.Common;
 using Mono.Infrastructure.Authentication.Common.Models;
 using Mono.Infrastructure.Authentication.DataAccess;
 using Mono.Infrastructure.DataAccess.Common;
-using Mono.Infrastructure.DataAccess.Customers;
 using Mono.Infrastructure.Dependencies;
 
 namespace Mono.Tests.Common
@@ -23,27 +22,43 @@ namespace Mono.Tests.Common
         public static IRequestHandler<TRequest, IEnvelope<TResponse>> GetHandler<TRequest, TResponse>()
             where TRequest : IEnvelopeRequest<TResponse>
         {
-            return Container().GetRequiredService<IRequestHandler<TRequest, IEnvelope<TResponse>>>();
+            return GetService<IRequestHandler<TRequest, IEnvelope<TResponse>>>();
         }
 
         public static INotificationHandler<TNotification> GetNotificationHandler<TNotification>()
             where TNotification : INotification
         {
-            return Container().GetRequiredService<INotificationHandler<TNotification>>();
+            return GetService<INotificationHandler<TNotification>>();
         }
 
-        public static ApplicationContext GetDatabaseContext()
+        public static ApplicationContext GetApplicationContext()
         {
-            return Container().GetRequiredService<ApplicationContext>();
+            return GetService<ApplicationContext>();
         }
 
-        public static void ClearDatabase()
+        public static UserContext GetUserContext()
         {
-            var context = GetDatabaseContext();
+            return GetService<UserContext>();
+        }
 
-            context.Customers.RemoveRange(context.Customers);
+        public static TService GetService<TService>()
+            where TService : class
+        {
+            return Container().GetRequiredService<TService>();
+        }
 
-            context.SaveChanges();
+        public static void ClearDatabases()
+        {
+            var applicationContext = GetApplicationContext();
+            var userContext = GetUserContext();
+
+            userContext.Users.ExecuteDelete();
+
+            userContext.SaveChanges();
+
+            applicationContext.Customers.ExecuteDelete();
+
+            applicationContext.SaveChanges();
         }
 
         private static IServiceProvider Container()
@@ -53,20 +68,24 @@ namespace Mono.Tests.Common
                 var services = new ServiceCollection();
 
                 services.AddApplication();
-                services.AddTransient<ICustomerRepository, CustomerRepository>();
 
-                services.AddIdentity<User, IdentityRole<Guid>>()
-                    .AddEntityFrameworkStores<UserContext>()
-                    .AddDefaultTokenProviders();
+                var data = new List<KeyValuePair<string, string?>>
+                {
+                    KeyValuePair.Create<string, string?>("Identity:Audience", Guid.NewGuid().ToString()),
+                    KeyValuePair.Create<string, string?>("Identity:Issuer", Guid.NewGuid().ToString()),
+                    KeyValuePair.Create<string, string?>("Identity:Key", Guid.NewGuid().ToString()),
+                };
 
-                services.AddAuthentication();
-
+                services.AddIdentityAuthentication(new ConfigurationManager().AddInMemoryCollection(data).Build());
                 services.AddLogging();
 
-                var connectionString = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
-                                       "Server=.\\SQLExpress;Database=Mono.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
+                var userConnection = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
+                                            "Server=.\\SQLExpress;Database=Mono.Identity.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
 
-                services.AddDbContext<ApplicationContext>(builder => builder.UseSqlServer(connectionString));
+                var applicationConnection = Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION_STRING") ??
+                                       "Server=.\\SQLExpress;Database=Mono.Application.Tests;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
+
+                services.AddDataAccess(userConnection, applicationConnection);
 
                 _provider = services.BuildServiceProvider();
             }
