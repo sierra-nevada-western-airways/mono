@@ -17,7 +17,6 @@ namespace Mono.Infrastructure.DataAccess.Common
         : ICreateEntity<TEntity>
         where TEntity : class, IAggregateRoot
     {
-        private readonly IPublisher _publisher;
         private readonly IApplicationContext _applicationContext;
 
         /// <summary>
@@ -27,12 +26,17 @@ namespace Mono.Infrastructure.DataAccess.Common
         /// <param name="applicationContext">An instance of the <see cref="ApplicationContext"/> interface.</param>
         protected BaseRepository(IPublisher publisher, IApplicationContext applicationContext)
         {
-            _publisher = publisher;
+            Publisher = publisher;
             _applicationContext = applicationContext;
         }
 
+        /// <summary>
+        /// Gets the <see cref="IPublisher"/> instance.
+        /// </summary>
+        protected IPublisher Publisher { get; }
+
         /// <inheritdoc/>
-        public async Task<Result> CreateEntity(TEntity entity, INotification? failureEvent = default, CancellationToken cancellationToken = default)
+        public virtual async Task<Result> CreateEntity(TEntity entity, CancellationToken cancellationToken = default)
         {
             int rowCount;
 
@@ -61,7 +65,7 @@ namespace Mono.Infrastructure.DataAccess.Common
         {
             foreach (var domainEvent in aggregateRoot.DomainEvents)
             {
-                await _publisher.Publish(domainEvent, cancellationToken);
+                await Publisher.Publish(domainEvent, cancellationToken);
             }
         }
     }

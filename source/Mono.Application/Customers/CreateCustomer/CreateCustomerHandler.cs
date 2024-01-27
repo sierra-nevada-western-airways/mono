@@ -33,7 +33,7 @@ namespace Mono.Application.Customers.CreateCustomer
         {
             var customer = CustomerFactory.CreateCustomer(notification);
 
-            var result = await _customerRepository.CreateEntity(customer, CreateCustomerFailed.Initialize(customer.Id), cancellationToken);
+            var result = await _customerRepository.CreateEntity(customer, cancellationToken);
 
             if (!result.IsSuccess)
             {

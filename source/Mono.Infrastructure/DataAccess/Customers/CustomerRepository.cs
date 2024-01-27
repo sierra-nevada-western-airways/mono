@@ -3,7 +3,9 @@
 // </copyright>
 
 using MediatR;
+using Mono.Application.Common.Responses;
 using Mono.Application.Customers.Common;
+using Mono.Application.Customers.CreateCustomer;
 using Mono.Domain.Customers;
 using Mono.Infrastructure.DataAccess.Common;
 
@@ -22,6 +24,19 @@ namespace Mono.Infrastructure.DataAccess.Customers
         public CustomerRepository(IPublisher publisher, IApplicationContext applicationContext)
             : base(publisher, applicationContext)
         {
+        }
+
+        /// <inheritdoc />
+        public override async Task<Result> CreateEntity(Customer entity, CancellationToken cancellationToken = default)
+        {
+            var result = await base.CreateEntity(entity, cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                await Publisher.Publish(CreateCustomerFailed.Initialize(entity.Id), cancellationToken);
+            }
+
+            return result;
         }
     }
 }
