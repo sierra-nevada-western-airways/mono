@@ -26,11 +26,7 @@ namespace Mono.API
             builder.Services.AddSwaggerAuthentication();
             builder.Services.AddApplication();
             builder.Services.AddIdentityAuthentication(builder.Configuration);
-
-            builder.Services.AddDataAccess(
-                builder.Configuration.GetConnectionString("Identity") ?? throw new NullReferenceException(),
-                builder.Configuration.GetConnectionString("Application") ?? throw new NullReferenceException());
-
+            builder.Services.AddDataAccess(builder.Configuration);
             builder.Services.AddMediatorBuddy(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             var app = builder.Build();

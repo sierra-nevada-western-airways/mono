@@ -34,5 +34,12 @@ namespace Mono.Infrastructure.Authentication.Common.Interfaces
         /// <param name="password">The password for the <see cref="User"/>.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="bool"/>.</returns>
         Task<bool> PasswordIsCorrect(User user, string password);
+
+        /// <summary>
+        /// Removes a <see cref="User"/> from the store.
+        /// </summary>
+        /// <param name="user">The <see cref="User"/> to remove.</param>
+        /// <returns>A <see cref="Task"/> of type <see cref="IdentityResult"/> representing the asynchronous operation.</returns>
+        Task<IdentityResult> DeleteUser(User user);
     }
 }

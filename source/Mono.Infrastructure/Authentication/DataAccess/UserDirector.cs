@@ -39,5 +39,11 @@ namespace Mono.Infrastructure.Authentication.DataAccess
         {
             return await _userManager.CheckPasswordAsync(user, password);
         }
+
+        /// <inheritdoc/>
+        public async Task<IdentityResult> DeleteUser(User user)
+        {
+            return await _userManager.DeleteAsync(user);
+        }
     }
 }

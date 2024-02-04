@@ -17,14 +17,14 @@ namespace Mono.Infrastructure.DataAccess.Common
         : ICreateEntity<TEntity>
         where TEntity : class, IAggregateRoot
     {
-        private readonly IApplicationContext _applicationContext;
+        private readonly IApplicationContext<TEntity> _applicationContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRepository{TEntity}"/> class.
         /// </summary>
         /// <param name="publisher">An instance of the <see cref="IPublisher"/> interface.</param>
         /// <param name="applicationContext">An instance of the <see cref="ApplicationContext"/> interface.</param>
-        protected BaseRepository(IPublisher publisher, IApplicationContext applicationContext)
+        protected BaseRepository(IPublisher publisher, IApplicationContext<TEntity> applicationContext)
         {
             Publisher = publisher;
             _applicationContext = applicationContext;
@@ -42,9 +42,7 @@ namespace Mono.Infrastructure.DataAccess.Common
 
             try
             {
-                await _applicationContext.Set<TEntity>().AddAsync(entity, cancellationToken);
-
-                rowCount = await _applicationContext.SaveChangesAsync(cancellationToken);
+                rowCount = await _applicationContext.AddEntity(entity, cancellationToken);
             }
             catch (Exception)
             {

@@ -82,7 +82,13 @@ namespace Mono.Tests.Common
                 var applicationConnection = Environment.GetEnvironmentVariable("APPLICATION_CONNECTION_STRING") ??
                                        "Server=.\\SQLExpress;Database=SWNA.Application;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=true";
 
-                services.AddDataAccess(userConnection, applicationConnection);
+                var persistence = new List<KeyValuePair<string, string?>>
+                {
+                    KeyValuePair.Create<string, string?>("ConnectionStrings:Identity", userConnection),
+                    KeyValuePair.Create<string, string?>("ConnectionStrings:Application", applicationConnection),
+                };
+
+                services.AddDataAccess(new ConfigurationManager().AddInMemoryCollection(persistence).Build());
 
                 _provider = services.BuildServiceProvider();
             }

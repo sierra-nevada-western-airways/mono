@@ -11,7 +11,7 @@ namespace Mono.Infrastructure.DataAccess.Common
     /// <summary>
     /// Persistence context for the application.
     /// </summary>
-    public sealed class ApplicationContext : DbContext, IApplicationContext
+    public sealed class ApplicationContext : DbContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationContext"/> class.

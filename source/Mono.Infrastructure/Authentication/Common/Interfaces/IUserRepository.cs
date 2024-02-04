@@ -10,7 +10,7 @@ namespace Mono.Infrastructure.Authentication.Common.Interfaces
     /// <summary>
     /// Allows interaction with user persistence.
     /// </summary>
-    internal interface IUserRepository
+    public interface IUserRepository
     {
         /// <summary>
         /// Creates a new <see cref="User"/> in the persistence.

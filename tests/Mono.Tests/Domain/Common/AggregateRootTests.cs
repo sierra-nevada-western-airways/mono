@@ -2,8 +2,8 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using MediatR;
 using Mono.Domain.Common;
+using Mono.Tests.Common;
 
 namespace Mono.Tests.Domain.Common
 {
@@ -31,7 +31,7 @@ namespace Mono.Tests.Domain.Common
         {
             var root = new TestAggregateRoot();
 
-            root.AddNotification(new TestNotification());
+            root.AddNotification(TestHelpers.TestNotificationInstance());
 
             Assert.AreEqual(1, root.DomainEvents.Count());
         }
@@ -46,10 +46,6 @@ namespace Mono.Tests.Domain.Common
                 : base(id)
             {
             }
-        }
-
-        internal class TestNotification : INotification
-        {
         }
     }
 }

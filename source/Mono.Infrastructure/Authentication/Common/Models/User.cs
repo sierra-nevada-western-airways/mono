@@ -3,10 +3,7 @@
 // </copyright>
 
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Mono.Application.Customers.CreateCustomer;
-using Mono.Domain.Common;
 using Mono.Infrastructure.Authentication.CreateUser;
 
 namespace Mono.Infrastructure.Authentication.Common.Models
@@ -14,17 +11,13 @@ namespace Mono.Infrastructure.Authentication.Common.Models
     /// <summary>
     /// Represents the identity of a user for authentication.
     /// </summary>
-    public sealed class User : IdentityUser<Guid>, IAggregateRoot
+    public sealed class User : IdentityUser<Guid>
     {
-        private readonly List<INotification> _domainEvents;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
         public User()
         {
-            _domainEvents = new List<INotification>();
-
             new UserValidator().ValidateAndThrow(this);
         }
 
@@ -39,10 +32,6 @@ namespace Mono.Infrastructure.Authentication.Common.Models
             Id = Guid.NewGuid();
             UserName = userName;
             Email = email;
-            _domainEvents = new List<INotification>
-            {
-                new CustomerCreated(Id),
-            };
 
             new UserValidator().ValidateAndThrow(this);
         }
@@ -51,10 +40,5 @@ namespace Mono.Infrastructure.Authentication.Common.Models
         /// Gets the username for the user.
         /// </summary>
         public string UserNameValue => UserName ?? throw new ArgumentNullException(nameof(UserName));
-
-        /// <summary>
-        /// Gets the user domain events.
-        /// </summary>
-        public IEnumerable<INotification> DomainEvents => _domainEvents;
     }
 }

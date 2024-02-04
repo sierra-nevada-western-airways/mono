@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Reflection;
+using ChainStrategy.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mono.Infrastructure.Dependencies
@@ -21,6 +22,8 @@ namespace Mono.Infrastructure.Dependencies
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(
                 Assembly.Load("Mono.Application"),
                 Assembly.Load("Mono.Infrastructure")));
+
+            services.AddChainStrategy(Assembly.GetExecutingAssembly());
         }
     }
 }

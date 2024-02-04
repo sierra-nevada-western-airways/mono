@@ -3,9 +3,7 @@
 // </copyright>
 
 using MediatR;
-using Mono.Application.Common.Responses;
 using Mono.Application.Customers.Common;
-using Mono.Application.Customers.CreateCustomer;
 using Mono.Domain.Customers;
 using Mono.Infrastructure.DataAccess.Common;
 
@@ -20,23 +18,10 @@ namespace Mono.Infrastructure.DataAccess.Customers
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.
         /// </summary>
         /// <param name="publisher">An instance of the <see cref="IPublisher"/> interface.</param>
-        /// <param name="applicationContext">An instance of the <see cref="IApplicationContext"/> interface.</param>
-        public CustomerRepository(IPublisher publisher, IApplicationContext applicationContext)
+        /// <param name="applicationContext">An instance of the <see cref="IApplicationContext{TEntity}"/> interface.</param>
+        public CustomerRepository(IPublisher publisher, IApplicationContext<Customer> applicationContext)
             : base(publisher, applicationContext)
         {
-        }
-
-        /// <inheritdoc />
-        public override async Task<Result> CreateEntity(Customer entity, CancellationToken cancellationToken = default)
-        {
-            var result = await base.CreateEntity(entity, cancellationToken);
-
-            if (!result.IsSuccess)
-            {
-                await Publisher.Publish(CreateCustomerFailed.Initialize(entity.Id), cancellationToken);
-            }
-
-            return result;
         }
     }
 }
