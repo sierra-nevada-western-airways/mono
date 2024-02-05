@@ -4,6 +4,7 @@
 
 using ChainStrategy;
 using MediatorBuddy;
+using Mono.Infrastructure.Authentication.Common.Factories;
 using Mono.Infrastructure.Authentication.CreateUser.Chain;
 
 namespace Mono.Infrastructure.Authentication.CreateUser
@@ -11,7 +12,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser
     /// <summary>
     /// Handler for creating a new user.
     /// </summary>
-    internal class CreateUserHandler : IEnvelopeHandler<CreateUserRequest, CreateUserResponse>
+    public class CreateUserHandler : IEnvelopeHandler<CreateUserRequest, CreateUserResponse>
     {
         private readonly IChainFactory _chainFactory;
 
@@ -39,7 +40,9 @@ namespace Mono.Infrastructure.Authentication.CreateUser
                 return Envelope<CreateUserResponse>.UserCouldNotBeCreated();
             }
 
-            return Envelope<CreateUserResponse>.Success(payload.Response);
+            var response = UserFactory.ResponseFromUser(payload.User);
+
+            return Envelope<CreateUserResponse>.Success(response);
         }
     }
 }

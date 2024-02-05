@@ -13,17 +13,17 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
     /// </summary>
     public class CreateUserChainHandler : ChainHandler<CreateUserPayload>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserManager _userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateUserChainHandler"/> class.
         /// </summary>
         /// <param name="handler">The next handler in the chain.</param>
-        /// <param name="userRepository">An instance of the <see cref="IUserRepository"/> interface.</param>
-        public CreateUserChainHandler(IChainHandler<CreateUserPayload>? handler, IUserRepository userRepository)
+        /// <param name="userManager">An instance of the <see cref="IUserManager"/> interface.</param>
+        public CreateUserChainHandler(IChainHandler<CreateUserPayload>? handler, IUserManager userManager)
             : base(handler)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
         {
             var user = UserFactory.UserFromPayload(payload);
 
-            var result = await _userRepository.CreateUser(user, payload.Request.Password, cancellationToken);
+            var result = await _userManager.CreateUser(user, payload.Request.Password);
 
             if (!result.Succeeded)
             {
@@ -45,9 +45,7 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
                 return payload;
             }
 
-            var response = UserFactory.FromCustomer(user);
-
-            payload.AddResponse(response);
+            payload.AddUser(user);
 
             return payload;
         }

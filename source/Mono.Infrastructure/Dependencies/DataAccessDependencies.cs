@@ -32,7 +32,6 @@ namespace Mono.Infrastructure.Dependencies
             services.AddTransient(typeof(IApplicationContext<>), typeof(ApplicationContextDirector<>));
             services.AddTransient<IUserManager, UserDirector>();
 
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
         }
     }

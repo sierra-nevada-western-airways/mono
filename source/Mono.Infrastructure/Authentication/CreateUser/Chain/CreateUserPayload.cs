@@ -3,6 +3,7 @@
 // </copyright>
 
 using ChainStrategy;
+using Mono.Infrastructure.Authentication.Common.Models;
 
 namespace Mono.Infrastructure.Authentication.CreateUser.Chain
 {
@@ -11,10 +12,11 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
     /// </summary>
     public class CreateUserPayload : ChainPayload
     {
+        private User? _user;
+
         private CreateUserPayload(CreateUserRequest request)
         {
             Request = request;
-            Response = default!;
         }
 
         /// <summary>
@@ -23,9 +25,9 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
         public CreateUserRequest Request { get; }
 
         /// <summary>
-        /// Gets the payload response.
+        /// Gets the user identifier.
         /// </summary>
-        public CreateUserResponse Response { get; private set; }
+        public User User => _user ?? throw new NullReferenceException(nameof(_user));
 
         /// <summary>
         /// Gets a value indicating whether the user should be rolled back.
@@ -43,12 +45,12 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
         }
 
         /// <summary>
-        /// Appends the response to the payload.
+        /// Appends the user identifier to the payload.
         /// </summary>
-        /// <param name="response">A <see cref="CreateUserResponse"/> instance.</param>
-        public void AddResponse(CreateUserResponse response)
+        /// <param name="user">The user for the payload.</param>
+        public void AddUser(User user)
         {
-            Response = response;
+            _user = user;
         }
 
         /// <summary>

@@ -49,6 +49,13 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
 
             var result = await _userManager.DeleteUser(user);
 
+            if (!result.Succeeded)
+            {
+                payload.Faulted();
+
+                return payload;
+            }
+
             return payload;
         }
     }

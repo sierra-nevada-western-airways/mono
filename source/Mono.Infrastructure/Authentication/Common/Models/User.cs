@@ -4,7 +4,6 @@
 
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Mono.Infrastructure.Authentication.CreateUser;
 
 namespace Mono.Infrastructure.Authentication.Common.Models
 {

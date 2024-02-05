@@ -7,10 +7,12 @@ using Mono.Application.Customers.Common;
 using Mono.Domain.Customers;
 using Mono.Infrastructure.Authentication.CreateUser;
 using Mono.Infrastructure.Authentication.CreateUser.Chain;
+using Mono.Tests.Common;
 using Moq;
 
 namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
 {
+    [TestClass]
     public class CreateCustomerChainHandlerTests
     {
         private readonly Mock<ICustomerRepository> _customerRepository;
@@ -28,13 +30,14 @@ namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
             _customerRepository.Setup(x => x.CreateEntity(It.IsAny<Customer>(), CancellationToken.None))
                 .ReturnsAsync(Result.Failure);
 
-            var result = await _handler.Handle(
-                CreateUserPayload.FromRequest(
-                    new CreateUserRequest(
-                    "userName",
-                    "password",
-                    "user@user.com")),
-                CancellationToken.None);
+            var payload = CreateUserPayload.FromRequest(new CreateUserRequest(
+                "userName",
+                "password",
+                "user@user.com"));
+
+            payload.AddUser(TestHelpers.ValidUser());
+
+            var result = await _handler.Handle(payload, CancellationToken.None);
 
             Assert.IsTrue(result.IsFaulted);
         }
@@ -45,13 +48,14 @@ namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
             _customerRepository.Setup(x => x.CreateEntity(It.IsAny<Customer>(), CancellationToken.None))
                 .ReturnsAsync(Result.Success);
 
-            var result = await _handler.Handle(
-                CreateUserPayload.FromRequest(
-                    new CreateUserRequest(
-                        "userName",
-                        "password",
-                        "user@user.com")),
-                CancellationToken.None);
+            var payload = CreateUserPayload.FromRequest(new CreateUserRequest(
+                "userName",
+                "password",
+                "user@user.com"));
+
+            payload.AddUser(TestHelpers.ValidUser());
+
+            var result = await _handler.Handle(payload, CancellationToken.None);
 
             Assert.IsFalse(result.IsFaulted);
         }

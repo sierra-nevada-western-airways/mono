@@ -33,7 +33,7 @@ namespace Mono.Infrastructure.Authentication.Common.Factories
         /// <returns>A new <see cref="Customer"/> instance.</returns>
         public static Customer CustomerFromPayload(CreateUserPayload payload)
         {
-            return new Customer(payload.Response.Id);
+            return new Customer(payload.User.Id);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Mono.Infrastructure.Authentication.Common.Factories
         /// </summary>
         /// <param name="user">A <see cref="User"/>.</param>
         /// <returns>A new <see cref="CreateUserResponse"/> instance.</returns>
-        public static CreateUserResponse FromCustomer(User user)
+        public static CreateUserResponse ResponseFromUser(User user)
         {
             return new CreateUserResponse(user.Id);
         }

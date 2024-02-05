@@ -17,7 +17,8 @@ namespace Mono.Infrastructure.Authentication.CreateUser.Chain
         public CreateUserChainProfile()
         {
             AddStep<CreateUserChainHandler>()
-                .AddStep<CreateCustomerChainHandler>();
+                .AddStep<CreateCustomerChainHandler>()
+                .AddStep<RollbackCreateUserChainHandler>();
         }
     }
 }

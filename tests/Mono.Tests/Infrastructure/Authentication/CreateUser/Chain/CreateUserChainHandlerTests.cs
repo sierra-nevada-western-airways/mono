@@ -14,22 +14,21 @@ namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
     [TestClass]
     public class CreateUserChainHandlerTests
     {
-        private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IUserManager> _userManager;
         private readonly CreateUserChainHandler _handler;
 
         public CreateUserChainHandlerTests()
         {
-            _userRepository = new Mock<IUserRepository>();
-            _handler = new CreateUserChainHandler(null, _userRepository.Object);
+            _userManager = new Mock<IUserManager>();
+            _handler = new CreateUserChainHandler(null, _userManager.Object);
         }
 
         [TestMethod]
         public async Task DoWork_CreateUserFailed_ReturnsCorrectResponse()
         {
-            _userRepository.Setup(x => x.CreateUser(
+            _userManager.Setup(x => x.CreateUser(
                 It.IsAny<User>(),
-                It.IsAny<string>(),
-                CancellationToken.None)).ReturnsAsync(IdentityResult.Failed());
+                It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
 
             var result = await _handler.DoWork(
                 CreateUserPayload.FromRequest(new CreateUserRequest(
@@ -44,10 +43,9 @@ namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
         [TestMethod]
         public async Task DoWork_CreateUserSuccess_ReturnsCorrectResponse()
         {
-            _userRepository.Setup(x => x.CreateUser(
+            _userManager.Setup(x => x.CreateUser(
                 It.IsAny<User>(),
-                It.IsAny<string>(),
-                CancellationToken.None)).ReturnsAsync(IdentityResult.Success);
+                It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
             var result = await _handler.DoWork(
                 CreateUserPayload.FromRequest(new CreateUserRequest(
@@ -57,7 +55,6 @@ namespace Mono.Tests.Infrastructure.Authentication.CreateUser.Chain
                 CancellationToken.None);
 
             Assert.IsFalse(result.IsFaulted);
-            Assert.IsNotNull(result.Response);
         }
     }
 }
