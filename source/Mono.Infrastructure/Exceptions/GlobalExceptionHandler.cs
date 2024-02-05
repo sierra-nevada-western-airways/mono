@@ -4,6 +4,7 @@
 
 using MediatorBuddy;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Mono.Infrastructure.Exceptions
 {
@@ -12,6 +13,17 @@ namespace Mono.Infrastructure.Exceptions
     /// </summary>
     public class GlobalExceptionHandler : INotificationHandler<GlobalExceptionOccurred>
     {
+        private readonly ILogger<GlobalExceptionHandler> _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlobalExceptionHandler"/> class.
+        /// </summary>
+        /// <param name="logger">An instance of the <see cref="ILogger{TCategoryName}"/> interface.</param>
+        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Handles a global exception.
         /// </summary>
@@ -20,6 +32,8 @@ namespace Mono.Infrastructure.Exceptions
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task Handle(GlobalExceptionOccurred notification, CancellationToken cancellationToken)
         {
+            _logger.LogError("A global exception of type {exception} occurred at {timestamp}.", notification.Exception, notification.DateTime);
+
             return Task.CompletedTask;
         }
     }
