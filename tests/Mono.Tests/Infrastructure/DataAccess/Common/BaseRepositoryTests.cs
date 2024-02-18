@@ -2,8 +2,9 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using ClearDomain.Common;
+using ClearDomain.GuidPrimary;
 using MediatR;
-using Mono.Domain.Common;
 using Mono.Infrastructure.DataAccess.Common;
 using Mono.Tests.Common;
 using Moq;
@@ -55,14 +56,14 @@ namespace Mono.Tests.Infrastructure.DataAccess.Common
             var result = await _baseRepository.CreateEntity(new TestEntity());
 
             Assert.IsTrue(result.IsSuccess);
-            _publisher.Verify(x => x.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Once);
+            _publisher.Verify(x => x.Publish(It.IsAny<IDomainEvent>(), CancellationToken.None), Times.Once);
         }
 
-        public class TestEntity : AggregateRoot
+        public sealed class TestEntity : AggregateRoot
         {
             public TestEntity()
             {
-                AddNotification(TestHelpers.TestNotificationInstance());
+                AppendDomainEvent(TestHelpers.TestNotificationInstance());
             }
         }
 

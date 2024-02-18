@@ -2,7 +2,7 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
-using MediatR;
+using Mono.Domain.Common;
 using Mono.Infrastructure.Authentication.Common.Models;
 
 namespace Mono.Tests.Common
@@ -19,12 +19,12 @@ namespace Mono.Tests.Common
             return "SuperSecret123$!";
         }
 
-        public static INotification TestNotificationInstance()
+        public static IDomainNotification TestNotificationInstance()
         {
             return new TestNotification();
         }
 
-        internal class TestNotification : INotification
+        internal class TestNotification : IDomainNotification
         {
         }
     }
