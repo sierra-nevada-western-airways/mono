@@ -3,7 +3,6 @@
 // </copyright>
 
 using Mono.Application.Common.Responses;
-using Mono.Domain.Common;
 
 namespace Mono.Application.Common.DataAccess
 {
@@ -12,7 +11,6 @@ namespace Mono.Application.Common.DataAccess
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public interface ICreateEntity<in TEntity>
-        where TEntity : IEntity
     {
         /// <summary>
         /// Adds a newly created entity to persistence.

@@ -10,7 +10,7 @@ namespace Mono.Infrastructure.Authentication.Common.Interfaces
     /// <summary>
     /// Allows for the management of identity customers.
     /// </summary>
-    internal interface ICustomerManager
+    public interface ICustomerManager
     {
         /// <summary>
         /// Creates a new user and persists the result.

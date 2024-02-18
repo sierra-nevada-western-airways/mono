@@ -2,6 +2,8 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using System.Reflection;
+using MediatorBuddy.AspNet.Registration;
 using Mono.Infrastructure.Dependencies;
 
 namespace Mono.API
@@ -25,6 +27,7 @@ namespace Mono.API
             builder.Services.AddApplication();
             builder.Services.AddIdentityAuthentication(builder.Configuration);
             builder.Services.AddDataAccess(builder.Configuration);
+            builder.Services.AddMediatorBuddy(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             var app = builder.Build();
 

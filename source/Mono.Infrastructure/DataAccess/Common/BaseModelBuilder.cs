@@ -2,8 +2,8 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using ClearDomain.GuidPrimary;
 using Microsoft.EntityFrameworkCore;
-using Mono.Domain.Common;
 
 namespace Mono.Infrastructure.DataAccess.Common
 {
