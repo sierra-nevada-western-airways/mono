@@ -5,6 +5,7 @@
 using System.Reflection;
 using MediatorBuddy.AspNet.Registration;
 using Mono.Infrastructure.Dependencies;
+using Serilog;
 
 namespace Mono.API
 {
@@ -20,6 +21,9 @@ namespace Mono.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Host.UseSerilog((context, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .WriteTo.Console());
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

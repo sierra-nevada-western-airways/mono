@@ -18,6 +18,20 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Install SQL Server
+        uses: Particular/install-sql-server-action@v1.0.2
+        with:
+          connection-string-env-var: USER_CONNECTION_STRING
+          catalog: SWNA.User
+          extra-params: "TrustServerCertificate=true;"
+
+      - name: Install SQL Server
+        uses: Particular/install-sql-server-action@v1.0.2
+        with:
+          connection-string-env-var: APPLICATION_CONNECTION_STRING
+          catalog: SWNA.Application
+          extra-params: "TrustServerCertificate=true;"
+
       - name: Restore
         run: dotnet restore
 
@@ -28,4 +42,4 @@ jobs:
         run: dotnet build --no-restore -c Release
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal -c Release
+        run: dotnet test --no-build --verbosity normal -c Release /p:CollectCoverage=true /p:Threshold=100 /p:ThresholdType=branch

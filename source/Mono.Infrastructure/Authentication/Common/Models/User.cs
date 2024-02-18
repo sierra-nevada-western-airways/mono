@@ -4,7 +4,6 @@
 
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Mono.Infrastructure.Authentication.CreateUser;
 
 namespace Mono.Infrastructure.Authentication.Common.Models
 {
@@ -16,9 +15,18 @@ namespace Mono.Infrastructure.Authentication.Common.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
+        public User()
+        {
+            new UserValidator().ValidateAndThrow(this);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="User"/> class.
+        /// </summary>
         /// <param name="userName">The user username.</param>
         /// <param name="email">The user email.</param>
         public User(string userName, string email)
+            : this()
         {
             Id = Guid.NewGuid();
             UserName = userName;

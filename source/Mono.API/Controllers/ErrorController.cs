@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mono.API.Controllers
 {
     /// <summary>
-    /// Error controller for end-user help with error codes.
+    /// Controller for error related documentation.
     /// </summary>
     [ApiController]
     [Route("[controller]")]

@@ -11,7 +11,7 @@ namespace Mono.Infrastructure.Authentication.Common.Interfaces
     /// <summary>
     /// Manages tokens for a user.
     /// </summary>
-    internal interface ITokenService
+    public interface ITokenService
     {
         /// <summary>
         /// Generates a bearer token for a user.

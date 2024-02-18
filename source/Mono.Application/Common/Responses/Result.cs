@@ -7,7 +7,7 @@ namespace Mono.Application.Common.Responses
     /// <summary>
     /// Abstraction for an application result.
     /// </summary>
-    public class Result
+    public sealed class Result
     {
         private Result(bool result)
         {

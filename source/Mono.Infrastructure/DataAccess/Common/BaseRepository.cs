@@ -15,28 +15,39 @@ namespace Mono.Infrastructure.DataAccess.Common
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public abstract class BaseRepository<TEntity>
         : ICreateEntity<TEntity>
-        where TEntity : IAggregateRoot
+        where TEntity : class, IAggregateRoot
     {
-        private readonly IPublisher _publisher;
-        private readonly ApplicationContext _applicationContext;
+        private readonly IApplicationContext<TEntity> _applicationContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRepository{TEntity}"/> class.
         /// </summary>
         /// <param name="publisher">An instance of the <see cref="IPublisher"/> interface.</param>
         /// <param name="applicationContext">An instance of the <see cref="ApplicationContext"/> interface.</param>
-        protected BaseRepository(IPublisher publisher, ApplicationContext applicationContext)
+        protected BaseRepository(IPublisher publisher, IApplicationContext<TEntity> applicationContext)
         {
-            _publisher = publisher;
+            Publisher = publisher;
             _applicationContext = applicationContext;
         }
 
-        /// <inheritdoc/>
-        public async Task<Result> CreateEntity(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            await _applicationContext.AddAsync(entity, cancellationToken);
+        /// <summary>
+        /// Gets the <see cref="IPublisher"/> instance.
+        /// </summary>
+        protected IPublisher Publisher { get; }
 
-            var rowCount = await _applicationContext.SaveChangesAsync(cancellationToken);
+        /// <inheritdoc/>
+        public virtual async Task<Result> CreateEntity(TEntity entity, CancellationToken cancellationToken = default)
+        {
+            int rowCount;
+
+            try
+            {
+                rowCount = await _applicationContext.AddEntity(entity, cancellationToken);
+            }
+            catch (Exception)
+            {
+                return Result.Failure();
+            }
 
             if (rowCount > 0)
             {
@@ -52,7 +63,7 @@ namespace Mono.Infrastructure.DataAccess.Common
         {
             foreach (var domainEvent in aggregateRoot.DomainEvents)
             {
-                await _publisher.Publish(domainEvent, cancellationToken);
+                await Publisher.Publish(domainEvent, cancellationToken);
             }
         }
     }

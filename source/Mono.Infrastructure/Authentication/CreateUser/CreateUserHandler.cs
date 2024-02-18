@@ -2,9 +2,10 @@
 // Copyright (c) Sierra Nevada Western Airways LLC. All rights reserved.
 // </copyright>
 
+using ChainStrategy;
 using MediatorBuddy;
 using Mono.Infrastructure.Authentication.Common.Factories;
-using Mono.Infrastructure.Authentication.Common.Interfaces;
+using Mono.Infrastructure.Authentication.CreateUser.Chain;
 
 namespace Mono.Infrastructure.Authentication.CreateUser
 {
@@ -13,15 +14,15 @@ namespace Mono.Infrastructure.Authentication.CreateUser
     /// </summary>
     public class CreateUserHandler : IEnvelopeHandler<CreateUserRequest, CreateUserResponse>
     {
-        private readonly ICustomerManager _customerManager;
+        private readonly IChainFactory _chainFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateUserHandler"/> class.
         /// </summary>
-        /// <param name="customerManager">An instance of the <see cref="ICustomerManager"/> interface.</param>
-        public CreateUserHandler(ICustomerManager customerManager)
+        /// <param name="chainFactory">An instance of the <see cref="IChainFactory"/> interface.</param>
+        public CreateUserHandler(IChainFactory chainFactory)
         {
-            _customerManager = customerManager;
+            _chainFactory = chainFactory;
         }
 
         /// <summary>
@@ -32,16 +33,14 @@ namespace Mono.Infrastructure.Authentication.CreateUser
         /// <returns>A <see cref="Task"/> of type <see cref="CreateUserResponse"/>.</returns>
         public async Task<IEnvelope<CreateUserResponse>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
         {
-            var customer = UserFactory.FromRequest(request);
+            var payload = await _chainFactory.Execute(CreateUserPayload.FromRequest(request), cancellationToken);
 
-            var result = await _customerManager.CreateCustomer(customer, request.Password, cancellationToken);
-
-            if (!result.Succeeded)
+            if (payload.IsFaulted)
             {
-                return Envelope<CreateUserResponse>.OperationCouldNotBeCompleted();
+                return Envelope<CreateUserResponse>.UserCouldNotBeCreated();
             }
 
-            var response = UserFactory.FromCustomer(customer);
+            var response = UserFactory.ResponseFromUser(payload.User);
 
             return Envelope<CreateUserResponse>.Success(response);
         }

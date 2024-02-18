@@ -7,7 +7,7 @@ namespace Mono.Infrastructure.Authentication.Common.Models
     /// <summary>
     /// Represents a refresh token for semi-session authentication.
     /// </summary>
-    internal class RefreshToken
+    public class RefreshToken
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RefreshToken"/> class.

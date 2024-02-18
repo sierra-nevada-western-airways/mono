@@ -29,7 +29,8 @@ namespace Mono.Infrastructure.Dependencies
 
             services.AddDbContext<ApplicationContext>(builder => builder.UseSqlServer(configuration.GetConnectionString("Application")));
 
-            services.AddTransient<ICustomerManager, CustomerManager>();
+            services.AddTransient(typeof(IApplicationContext<>), typeof(ApplicationContextDirector<>));
+            services.AddTransient<IUserManager, UserDirector>();
 
             services.AddTransient<ICustomerRepository, CustomerRepository>();
         }

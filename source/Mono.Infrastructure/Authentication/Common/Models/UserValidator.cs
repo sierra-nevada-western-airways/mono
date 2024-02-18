@@ -3,9 +3,8 @@
 // </copyright>
 
 using FluentValidation;
-using Mono.Infrastructure.Authentication.Common.Models;
 
-namespace Mono.Infrastructure.Authentication.CreateUser
+namespace Mono.Infrastructure.Authentication.Common.Models
 {
     /// <summary>
     /// Validator for user objects.
@@ -17,7 +16,6 @@ namespace Mono.Infrastructure.Authentication.CreateUser
         /// </summary>
         public UserValidator()
         {
-            RuleFor(user => user.Id).NotEqual(Guid.Empty);
         }
     }
 }

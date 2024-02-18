@@ -34,7 +34,7 @@ namespace Mono.API.Controllers
         /// <param name="request">A <see cref="CreateUserRequest"/> object.</param>
         /// <returns>A <see cref="Task"/> of type <see cref="IActionResult"/>.</returns>
         [AllowAnonymous]
-        [HttpPost("", Name = "CreateUser")]
+        [HttpPost(Name = "CreateUser")]
         [ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateUser(CreateUserRequest request)
         {

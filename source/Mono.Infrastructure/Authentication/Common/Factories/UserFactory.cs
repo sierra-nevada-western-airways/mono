@@ -3,8 +3,10 @@
 // </copyright>
 
 using System.Security.Claims;
+using Mono.Domain.Customers;
 using Mono.Infrastructure.Authentication.Common.Models;
 using Mono.Infrastructure.Authentication.CreateUser;
+using Mono.Infrastructure.Authentication.CreateUser.Chain;
 using Mono.Infrastructure.Authentication.UserNameSignIn;
 
 namespace Mono.Infrastructure.Authentication.Common.Factories
@@ -15,13 +17,23 @@ namespace Mono.Infrastructure.Authentication.Common.Factories
     internal static class UserFactory
     {
         /// <summary>
-        /// Creates a new user from a request.
+        /// Creates a new user from a payload.
         /// </summary>
-        /// <param name="request">A <see cref="CreateUserRequest"/> object.</param>
+        /// <param name="payload">A <see cref="CreateUserPayload"/> object.</param>
         /// <returns>A new <see cref="User"/> instance.</returns>
-        public static User FromRequest(CreateUserRequest request)
+        public static User UserFromPayload(CreateUserPayload payload)
         {
-            return new User(request.UserName, request.Email);
+            return new User(payload.Request.UserName, payload.Request.Email);
+        }
+
+        /// <summary>
+        /// Create a new customer from a payload.
+        /// </summary>
+        /// <param name="payload">A <see cref="CreateUserPayload"/> object.</param>
+        /// <returns>A new <see cref="Customer"/> instance.</returns>
+        public static Customer CustomerFromPayload(CreateUserPayload payload)
+        {
+            return new Customer(payload.User.Id);
         }
 
         /// <summary>
@@ -29,7 +41,7 @@ namespace Mono.Infrastructure.Authentication.Common.Factories
         /// </summary>
         /// <param name="user">A <see cref="User"/>.</param>
         /// <returns>A new <see cref="CreateUserResponse"/> instance.</returns>
-        public static CreateUserResponse FromCustomer(User user)
+        public static CreateUserResponse ResponseFromUser(User user)
         {
             return new CreateUserResponse(user.Id);
         }
